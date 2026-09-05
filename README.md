@@ -4,9 +4,9 @@ A safe, native Linux app uninstaller built with **Rust, GTK4 and libadwaita**.
 
 Cleanly shows how an application was installed, what belongs to it, and exactly what will be removed before making any changes.
 
-![Cleanly preview](assets/cleanly-preview.png)
+<img src="assets/cleanly-preview.png" alt="Cleanly preview" width="100%">
 
-![Cleanly application inspector](assets/cleanly-inspector.png)
+<img src="assets/cleanly-inspector.webp" alt="Cleanly application inspector" width="100%">
 
 ## Features
 
