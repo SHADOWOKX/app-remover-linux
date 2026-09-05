@@ -1,0 +1,19 @@
+/target/
+**/target/
+
+# Packaging build output
+/dist/
+dist-package.*/
+
+.env
+.env.*
+
+*.log
+*.tmp
+*.swp
+
+.DS_Store
+.idea/
+.vscode/
+
+coverage/

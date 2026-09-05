@@ -1,0 +1,54 @@
+name: Safety and native build
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      # actions/checkout v7.0.1 — pinned to an immutable commit SHA.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      # dtolnay/rust-toolchain stable — pinned to an immutable commit SHA.
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          components: rustfmt, clippy
+
+      - name: Install native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev pkg-config appstream dpkg-dev
+
+      - name: Format
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+      - name: Tests
+        run: cargo test --workspace --locked
+
+      - name: Native build
+        run: cargo build --workspace --locked
+
+      - name: Validate AppStream metadata
+        run: appstreamcli validate data/io.github.cleanly.Cleanly.metainfo.xml
+
+      - name: Build Debian package
+        run: make deb
+
+      - name: Verify Debian package
+        run: python3 tests/package-smoke.py
+
+      - name: Verify packaged binaries contain no build-home paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          package=$(find dist -maxdepth 1 -type f -name 'cleanly_*.deb' -print -quit)
+          test -n "$package"
+          extracted=$(mktemp -d)
+          dpkg-deb -x "$package" "$extracted"
+          if grep -aR -F "$HOME" "$extracted/usr/bin" "$extracted/usr/libexec"; then
+            echo "Packaged executable contains the CI build home path" >&2
+            exit 1
+          fi

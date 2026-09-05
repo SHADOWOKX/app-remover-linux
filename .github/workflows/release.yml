@@ -1,0 +1,85 @@
+name: Publish preview release
+
+on:
+  workflow_run:
+    workflows: ["Safety and native build"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Resolve target commit
+        id: target
+        shell: bash
+        env:
+          WORKFLOW_SHA: ${{ github.event.workflow_run.head_sha }}
+          FALLBACK_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          sha=${WORKFLOW_SHA:-$FALLBACK_SHA}
+          test -n "$sha"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      # actions/checkout v7.0.1 — pinned to an immutable commit SHA.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+
+      - name: Resolve version and release state
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(awk -F '"' '/^version = "/ { print $2; exit }' Cargo.toml)
+          test -n "$version"
+          tag="v$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        if: steps.release.outputs.exists == 'false'
+
+      - name: Install native build dependencies
+        if: steps.release.outputs.exists == 'false'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev pkg-config appstream dpkg-dev
+
+      - name: Build and validate package
+        if: steps.release.outputs.exists == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          appstreamcli validate data/io.github.cleanly.Cleanly.metainfo.xml
+          make deb
+          python3 tests/package-smoke.py
+
+      - name: Publish preview release
+        if: steps.release.outputs.exists == 'false'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "${{ steps.release.outputs.tag }}" \
+            dist/cleanly_*.deb dist/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "${{ steps.target.outputs.sha }}" \
+            --title "Cleanly ${{ steps.release.outputs.tag }}" \
+            --generate-notes \
+            --prerelease
