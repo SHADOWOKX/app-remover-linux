@@ -1,6 +1,9 @@
 /target/
 **/target/
 
+# Packaging build output
+dist-package.*/
+
 .env
 .env.*
 

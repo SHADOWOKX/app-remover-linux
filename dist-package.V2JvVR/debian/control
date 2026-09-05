@@ -1,9 +1,0 @@
-Source: cleanly
-Section: utils
-Priority: optional
-Maintainer: Cleanly contributors <cleanly@example.invalid>
-Standards-Version: 4.7.0
-
-Package: cleanly
-Architecture: any
-Description: Native application inspector and conservative uninstaller
