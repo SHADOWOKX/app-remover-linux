@@ -6,7 +6,7 @@ Cleanly shows how an application was installed, what belongs to it, and exactly 
 
 ![Cleanly preview](assets/cleanly-preview.png)
 
-![Cleanly application inspector](assets/cleanly-inspector.jpg)
+![Cleanly application inspector](assets/cleanly-inspector.webp)
 
 ## Features
 
