@@ -1,0 +1,9 @@
+[package]
+name = "cleanly-apt"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+cleanly-core = { path = "../cleanly-core" }
+cleanly-platform = { path = "../cleanly-platform" }

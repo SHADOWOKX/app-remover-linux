@@ -1,0 +1,17 @@
+[package]
+name = "cleanly-ui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+cleanly-core = { path = "../cleanly-core" }
+cleanly-platform = { path = "../cleanly-platform" }
+cleanly-service = { path = "../cleanly-service" }
+gtk.workspace = true
+adw.workspace = true
+async-channel.workspace = true
+
+[[bin]]
+name = "cleanly"
+path = "src/main.rs"

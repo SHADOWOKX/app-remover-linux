@@ -1,0 +1,15 @@
+/target/
+**/target/
+
+.env
+.env.*
+
+*.log
+*.tmp
+*.swp
+
+.DS_Store
+.idea/
+.vscode/
+
+coverage/

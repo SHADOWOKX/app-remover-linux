@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Cleanly
+Comment=Inspect applications and remove them with confidence
+Exec=cleanly
+Icon=io.github.cleanly.Cleanly
+Terminal=false
+Categories=System;Settings;PackageManager;GTK;
+Keywords=uninstall;applications;cleanup;quarantine;
+StartupNotify=true

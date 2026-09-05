@@ -1,0 +1,10 @@
+Package: cleanly
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Cleanly contributors <cleanly@example.invalid>
+Depends: libadwaita-1-0 (>= 1.5~beta), libc6 (>= 2.39), libgcc-s1 (>= 4.2), libglib2.0-0t64 (>= 2.54.0), libgtk-4-1 (>= 4.12.0), pkexec, dpkg
+Description: Native application inspector and conservative uninstaller
+ Inspect APT, Flatpak, Snap and AppImage ownership before removal.
+ Preview release with guarded quarantine and restore.

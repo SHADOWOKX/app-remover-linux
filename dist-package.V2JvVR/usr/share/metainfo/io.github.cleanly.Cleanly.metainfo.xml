@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.cleanly.Cleanly</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Cleanly</name>
+  <developer id="io.github.cleanly"><name>Cleanly contributors</name></developer>
+  <summary>Inspect applications and remove them with confidence</summary>
+  <description>
+    <p>A native Linux application inspector and conservative uninstaller. See installation sources, review ownership evidence, and quarantine proven application data.</p>
+    <p>This preview supports APT/dpkg, Flatpak, Snap and AppImage discovery. Uncertain files, shared dependencies and user documents are preserved.</p>
+  </description>
+  <launchable type="desktop-id">io.github.cleanly.Cleanly.desktop</launchable>
+  <provides><binary>cleanly</binary></provides>
+  <content_rating type="oars-1.1" />
+  <releases><release version="0.1.0" date="2026-09-05" type="development" /></releases>
+</component>
