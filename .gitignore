@@ -2,6 +2,7 @@
 **/target/
 
 # Packaging build output
+/dist/
 dist-package.*/
 
 .env

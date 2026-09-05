@@ -26,6 +26,6 @@ install:
 	install -Dm644 data/icons/hicolor/scalable/apps/io.github.cleanly.Cleanly.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/io.github.cleanly.Cleanly.svg
 stage:
 	$(MAKE) install DESTDIR=$(CURDIR)/dist/stage
-# Packaging runs unprivileged. dpkg-deb records root ownership without changing host files.
-deb: all
+# Packaging rebuilds from scratch with privacy-safe path remapping.
+deb:
 	./scripts/package-deb.sh $(PROFILE)
