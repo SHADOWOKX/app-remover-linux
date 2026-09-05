@@ -6,6 +6,8 @@ Cleanly shows how an application was installed, what belongs to it, and exactly 
 
 ![Cleanly preview](assets/cleanly-preview.png)
 
+![Cleanly application inspector](assets/cleanly-inspector.png)
+
 ## Features
 
 - One-click uninstall with a full removal preview
